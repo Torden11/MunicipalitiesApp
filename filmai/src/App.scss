@@ -2,7 +2,7 @@
 @import "./sass/line";
 
 body {
-  height: 100vh;
+  min-height: 100vh;
   overflow: auto;
   background: linear-gradient(to left top, #eccb10, #84c222,);
 }
