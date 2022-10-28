@@ -48,7 +48,7 @@ function Create() {
     }
 
     return (
-        <div className="card m-4 col-lg-4 col-md-12">
+        <div className="mx-auto card m-4 col-lg-4 col-md-12">
             <h5 className="card-header">New Movie</h5>
             <div className="card-body">
                 <div className="mb-3">
