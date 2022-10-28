@@ -39,7 +39,7 @@ function Main() {
             if (null === comment) {
                 return;
             }
-            axios.post('http://localhost:3003/home/comments/' + comment.movie_id, comment, authConfig())
+            axios.post('http://localhost:3003/home/comments/' + comment.mun_id, comment, authConfig())
             .then(res => {
                 setLastUpdate(Date.now());
                 makeMsg(res.data.text, res.data.type);

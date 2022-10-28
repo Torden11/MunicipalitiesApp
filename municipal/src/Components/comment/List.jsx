@@ -18,7 +18,7 @@ function List() {
 
     return (
         <div className="card m-4">
-            <h5 className="card-header">Movies List ({stats.municipalityCount})</h5>
+            <h5 className="card-header">Municipalities List ({stats.municipalityCount})</h5>
             <div className="card-body">
                 <ul className="list-group">
                     {

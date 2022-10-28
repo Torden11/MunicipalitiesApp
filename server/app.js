@@ -182,7 +182,7 @@ app.get("/server/municipalities/nocomments", (req, res) => {
     SELECT m.*, c.id AS cid, c.post
     FROM municipalities AS m
     INNER JOIN comments AS c
-    ON c.municipality_id = m.id
+    ON c.mun_id = m.id
     ORDER BY m.title
     `;
     con.query(sql, (err, result) => {

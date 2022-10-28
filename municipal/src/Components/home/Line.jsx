@@ -14,7 +14,7 @@ function Line({ municipality }) {
     const add = () => {
         setComment({
             post,
-            municipality_id: municipality[1][0].id
+            mun_id: municipality[1][0].id
         });
         setPost('');
     };

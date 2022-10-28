@@ -8,7 +8,7 @@ function Line({ municipality }) {
     const remove = id => {
         setComment({id});
     }
-console.log(municipality)
+
     return (
         <li className="list-group-item">
             <div className="home">
