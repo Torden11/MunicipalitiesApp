@@ -46,16 +46,45 @@ body {
   margin: 10px;
   display: flex;
   flex-direction: column;
+  position: relative;
   label {
-    margin: 0 10px;
-    cursor: pointer;
-    user-select: none;
-  }
-  img {
-    height: auto;
-    width: 150px;
-    display: block;
-  }
+    position: absolute;
+    top: 6px;
+    left: 120px;
+    border-radius: 10em;
+    padding: 2px 6px 3px;
+    text-decoration: none;
+    font: 700 10px/15px sans-serif;
+    background: #555;
+    border: 3px solid #fff;
+    color: #FFF;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.5), inset 0 2px 4px rgba(0,0,0,0.3);
+      text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+      -webkit-transition: background 0.5s;
+      transition: background 0.5s;
+      z-index: 10;
+    }
+    label:hover {
+     background: #E54E4E;
+      padding: 3px 7px 5px;
+      cursor: pointer;
+    }
+    label:active {
+     background: #E54E4E;
+    }
+    [type=checkbox] {
+      display: none;
+    }
+    img {
+        height: auto;
+        width: 150px;
+        display: block;
+        // position: relative;
+        z-index: 5;
+    }
+    [type=checkbox]:checked~img {
+        opacity: 0.3;
+    }
 }
 
 .red-image {

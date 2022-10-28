@@ -163,63 +163,63 @@ app.get("/server/municipalities", (req, res) => {
     });
 });
 
-// app.get("/home/movies", (req, res) => {
-//     const sql = `
-//     SELECT m.*, c.id AS cid, c.post
-//     FROM movies AS m
-//     LEFT JOIN comments AS c
-//     ON c.movie_id = m.id
-//     ORDER BY m.title
-//     `;
-//     con.query(sql, (err, result) => {
-//         if (err) throw err;
-//         res.send(result);
-//     });
-// });
+app.get("/home/municipalities", (req, res) => {
+    const sql = `
+    SELECT m.*, c.id AS cid, c.post
+    FROM municipalities AS m
+    LEFT JOIN comments AS c
+    ON c.mun_id = m.id
+    ORDER BY m.title
+    `;
+    con.query(sql, (err, result) => {
+        if (err) throw err;
+        res.send(result);
+    });
+});
 
-// app.get("/server/movies/nocomments", (req, res) => {
-//     const sql = `
-//     SELECT m.*, c.id AS cid, c.post
-//     FROM movies AS m
-//     INNER JOIN comments AS c
-//     ON c.movie_id = m.id
-//     ORDER BY m.title
-//     `;
-//     con.query(sql, (err, result) => {
-//         if (err) throw err;
-//         res.send(result);
-//     });
-// });
+app.get("/server/municipalities/nocomments", (req, res) => {
+    const sql = `
+    SELECT m.*, c.id AS cid, c.post
+    FROM municipalities AS m
+    INNER JOIN comments AS c
+    ON c.municipality_id = m.id
+    ORDER BY m.title
+    `;
+    con.query(sql, (err, result) => {
+        if (err) throw err;
+        res.send(result);
+    });
+});
 
 
 // //DELETE
-// app.delete("/server/movies/:id", (req, res) => {
-//     const sql = `
-//     DELETE FROM movies
-//     WHERE id = ?
-//     `;
-//     con.query(sql, [req.params.id], (err, result) => {
-//         if (err) throw err;
-//         res.send({ msg: 'OK', text: 'The movie has been deleted.', type: 'info' });
-//     });
-// });
+app.delete("/server/municipalities/:id", (req, res) => {
+    const sql = `
+    DELETE FROM municipalities
+    WHERE id = ?
+    `;
+    con.query(sql, [req.params.id], (err, result) => {
+        if (err) throw err;
+        res.send({ msg: 'OK', text: 'The municipality has been deleted.', type: 'info' });
+    });
+});
 
-// app.delete("/server/comments/:id", (req, res) => {
-//     const sql = `
-//     DELETE FROM comments
-//     WHERE id = ?
-//     `;
-//     con.query(sql, [req.params.id], (err, result) => {
-//         if (err) throw err;
-//         res.send({ msg: 'OK', text: 'Unappropriate comment has been deleted.', type: 'info' });
-//     });
-// });
+app.delete("/server/comments/:id", (req, res) => {
+    const sql = `
+    DELETE FROM comments
+    WHERE id = ?
+    `;
+    con.query(sql, [req.params.id], (err, result) => {
+        if (err) throw err;
+        res.send({ msg: 'OK', text: 'Unappropriate comment has been deleted.', type: 'info' });
+    });
+});
 
 
 // //EDIT
-// app.put("/home/movies/:id", (req, res) => {
+// app.put("/home/municipalities/:id", (req, res) => {
 //     const sql = `
-//     UPDATE movies
+//     UPDATE municipalities
 //     SET 
 //     rating_sum = rating_sum + ?, 
 //     rating_count = rating_count + 1, 
@@ -231,36 +231,40 @@ app.get("/server/municipalities", (req, res) => {
 //         res.send({ msg: 'OK', text: 'Thanks for your vote!', type: 'info' });
 //     });
 // });
-// app.put("/server/movies/:id", (req, res) => {
-//     let sql;
-//     let r;
-//     if (req.body.deletePhoto) {
-//         sql = `
-//         UPDATE movies
-//         SET title = ?, price = ?, image = null
-//         WHERE id = ?
-//         `;
-//         r = [req.body.title, req.body.price, req.params.id];
-//     } else if (req.body.image) {
-//         sql = `
-//         UPDATE movies
-//         SET title = ?, price = ?, image = ?
-//         WHERE id = ?
-//         `;
-//         r = [req.body.title, req.body.price, req.body.image, req.params.id];
-//     } else {
-//         sql = `
-//         UPDATE movies
-//         SET title = ?, price = ?
-//         WHERE id = ?
-//         `;
-//         r = [req.body.title, req.body.price, req.params.id]
-//     }
-//     con.query(sql, r, (err, result) => {
-//         if (err) throw err;
-//         res.send({ msg: 'OK', text: 'The movie has been edited.', type: 'success' });
-//     });
-// });
+
+app.put("/server/municipalities/:id", (req, res) => {
+    let sql;
+    let r;
+    if (req.body.deletePhoto) {
+        sql = `
+        UPDATE municipalities
+    
+        SET title = ?, service = ?, image = null
+        WHERE id = ?
+        `;
+        r = [req.body.title, req.body.service, req.params.id];
+    } else if (req.body.image) {
+        sql = `
+        UPDATE municipalities
+    
+        SET title = ?, service = ?, image = ?
+        WHERE id = ?
+        `;
+        r = [req.body.title, req.body.service, req.body.image, req.params.id];
+    } else {
+        sql = `
+        UPDATE municipalities
+    
+        SET title = ?, service = ?
+        WHERE id = ?
+        `;
+        r = [req.body.title, req.body.service, req.params.id]
+    }
+    con.query(sql, r, (err, result) => {
+        if (err) throw err;
+        res.send({ msg: 'OK', text: 'The municipality has been edited.', type: 'success' });
+    });
+});
 
 app.listen(port, () => {
     console.log(`Savyvaldybes yra registruotos ${port} porte!`)

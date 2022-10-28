@@ -3,25 +3,18 @@ import Home from '../../Contexts/Home';
 
 import { useState } from "react";
 
-function Line({ movie }) {
+function Line({ municipality }) {
 
-    const { setRateData, setComment } = useContext(Home);
+    const { setComment } = useContext(Home);
 
-    const [rate, setRate] = useState(5);
+    
     const [post, setPost] = useState('');
 
-    const doRating = () => {
-        setRateData({
-            id: movie[1][0].id,
-            rate
-        });
-        setRate(5);
-    }
-
+    
     const add = () => {
         setComment({
             post,
-            movie_id: movie[1][0].id
+            municipality_id: municipality[1][0].id
         });
         setPost('');
     };
@@ -31,26 +24,14 @@ function Line({ movie }) {
             <div className="home">
                 <div className="home__content">
                     <div className="home__content__info">
-                    <h1>{movie[0]}</h1>
-                        {movie[1][0].image ? <div className='img-bin'>
-                            <img src={movie[1][0].image} alt={movie[0]}>
+                    <h1>{municipality[0]}</h1>
+                        {municipality[1][0].image ? <div className='img-bin'>
+                            <img src={municipality[1][0].image} alt={municipality[0]}>
                             </img>
                         </div> : null}
                     </div>
-                    <div className="home__content__price">
-                    Price: {movie[1][0].price} Eur
-                    </div>
-
                     <div className="home__content__info">
-                    <h2>Movie Rating: {movie[1][0].rating ?? 'no rating'}</h2>
-                        <select value={rate} onChange={e => setRate(e.target.value)}>
-                            {
-                                [...Array(10)].map((_, i) => <option key={i + 1} value={i + 1}>{i + 1}</option>)
-                            }
-                        </select>
-                    </div>
-                    <div className="home__buttons">
-                        <button onClick={doRating} type="button" className="btn btn-outline-success">Rate</button>
+                    Service: {municipality[1][0].service}
                     </div>
                 </div>
             </div>
@@ -58,7 +39,7 @@ function Line({ movie }) {
 
                 <ul className="list-group">
                     {
-                        movie[1]?.map(c => c.cid !== null ? <li key={c.cid} className="list-group-item"><p>{c.post}</p></li> : null)
+                        municipality[1]?.map(c => c.cid !== null ? <li key={c.cid} className="list-group-item"><p>{c.post}</p></li> : null)
                     }
                 </ul>
 

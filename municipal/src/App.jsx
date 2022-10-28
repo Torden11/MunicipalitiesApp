@@ -9,7 +9,7 @@ import {
 import Nav from "./Components/Nav";
 import Home from "./Components/home/Main";
 import MainComments from "./Components/comment/Main";
-import MainMovies from "./Components/movies/Main";
+import Main from "./Components/municipalities/Main";
 import RegisterPage from "./Components/register/Main";
 import { login, logout, authConfig } from "./Functions/auth";
 import { useState, useEffect, useCallback, useContext } from "react";
@@ -78,10 +78,10 @@ function App() {
             element={<LogoutPage setRoleChange={setRoleChange} />}
           />
           <Route
-            path="/movies"
+            path="/municipalities"
             element={
               <RequireAuth role="admin">
-                <MainMovies />
+                <Main />
               </RequireAuth>
             }
           ></Route>

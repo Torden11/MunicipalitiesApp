@@ -9,7 +9,7 @@ import DataContext from "../../Contexts/DataContext";
 function Main() {
 
         const [lastUpdate, setLastUpdate] = useState(Date.now());
-        const [movies, setMovies] = useState(null);
+        const [municipalities, setMunicipalities] = useState(null);
         const [rateData, setRateData] = useState(null);
         const [comment, setComment] = useState(null);
         const { makeMsg } = useContext(DataContext);
@@ -29,9 +29,9 @@ function Main() {
 
         // READ for list
         useEffect(() => {
-            axios.get('http://localhost:3003/home/movies', authConfig())
+            axios.get('http://localhost:3003/home/municipalities', authConfig())
                 .then(res => {
-                    setMovies(reList(res.data));
+                    setMunicipalities(reList(res.data));
                 })
         }, [lastUpdate]);
 
@@ -51,7 +51,7 @@ function Main() {
             if (null === rateData) {
                 return;
             }
-            axios.put('http://localhost:3003/home/movies/' + rateData.id, rateData, authConfig())
+            axios.put('http://localhost:3003/home/municipalities/' + rateData.id, rateData, authConfig())
             .then(res => {
                 setLastUpdate(Date.now());
                 makeMsg(res.data.text, res.data.type);
@@ -60,9 +60,9 @@ function Main() {
 
       return (
         <Home.Provider value={{
-            movies,
+            municipalities,
             setRateData,
-            setMovies,
+            setMunicipalities,
             setComment
         }}>
         <div className="container">
