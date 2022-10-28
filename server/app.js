@@ -19,7 +19,7 @@ const con = mysql.createConnection({
     host: "localhost",
     user: "root",
     password: "",
-    database: "ruoniu_filmai_3",
+    database: "municipalities_services",
 });
 
 ////////////////////LOGIN/////////////////
@@ -128,33 +128,33 @@ app.post("/register", (req, res) => {
 ///////////////////END////////////////////
 
 //CREATE
-app.post("/server/movies", (req, res) => {
+app.post("/server/municipalities", (req, res) => {
     const sql = `
-    INSERT INTO movies (title, price, image)
+    INSERT INTO municipalities (title, service, image)
     VALUES (?, ?, ?)
     `;
-    con.query(sql, [req.body.title, req.body.price, req.body.image], (err, result) => {
+    con.query(sql, [req.body.title, req.body.service, req.body.image], (err, result) => {
         if (err) throw err;
-        res.send({ msg: 'OK', text: 'A new movie has been added.', type: 'success' });
+        res.send({ msg: 'OK', text: 'A new municipality has been added.', type: 'success' });
     });
 });
 
 app.post("/home/comments/:id", (req, res) => {
     const sql = `
-    INSERT INTO comments (post, movie_id)
+    INSERT INTO comments (post, mun_id)
     VALUES (?, ?)
     `;
     con.query(sql, [req.body.post, req.params.id], (err, result) => {
         if (err) throw err;
-        res.send({ msg: 'OK', text: 'Thanks for the comment.', type: 'info' });
+        res.send({ msg: 'OK', text: 'Thanks for the post.', type: 'info' });
     });
 });
 
 // READ (all)
-app.get("/server/movies", (req, res) => {
+app.get("/server/municipalities", (req, res) => {
     const sql = `
     SELECT *
-    FROM movies
+    FROM municipalities
     ORDER BY id DESC
     `;
     con.query(sql, (err, result) => {
@@ -163,107 +163,107 @@ app.get("/server/movies", (req, res) => {
     });
 });
 
-app.get("/home/movies", (req, res) => {
-    const sql = `
-    SELECT m.*, c.id AS cid, c.post
-    FROM movies AS m
-    LEFT JOIN comments AS c
-    ON c.movie_id = m.id
-    ORDER BY m.title
-    `;
-    con.query(sql, (err, result) => {
-        if (err) throw err;
-        res.send(result);
-    });
-});
+// app.get("/home/movies", (req, res) => {
+//     const sql = `
+//     SELECT m.*, c.id AS cid, c.post
+//     FROM movies AS m
+//     LEFT JOIN comments AS c
+//     ON c.movie_id = m.id
+//     ORDER BY m.title
+//     `;
+//     con.query(sql, (err, result) => {
+//         if (err) throw err;
+//         res.send(result);
+//     });
+// });
 
-app.get("/server/movies/nocomments", (req, res) => {
-    const sql = `
-    SELECT m.*, c.id AS cid, c.post
-    FROM movies AS m
-    INNER JOIN comments AS c
-    ON c.movie_id = m.id
-    ORDER BY m.title
-    `;
-    con.query(sql, (err, result) => {
-        if (err) throw err;
-        res.send(result);
-    });
-});
-
-
-//DELETE
-app.delete("/server/movies/:id", (req, res) => {
-    const sql = `
-    DELETE FROM movies
-    WHERE id = ?
-    `;
-    con.query(sql, [req.params.id], (err, result) => {
-        if (err) throw err;
-        res.send({ msg: 'OK', text: 'The movie has been deleted.', type: 'info' });
-    });
-});
-
-app.delete("/server/comments/:id", (req, res) => {
-    const sql = `
-    DELETE FROM comments
-    WHERE id = ?
-    `;
-    con.query(sql, [req.params.id], (err, result) => {
-        if (err) throw err;
-        res.send({ msg: 'OK', text: 'Unappropriate comment has been deleted.', type: 'info' });
-    });
-});
+// app.get("/server/movies/nocomments", (req, res) => {
+//     const sql = `
+//     SELECT m.*, c.id AS cid, c.post
+//     FROM movies AS m
+//     INNER JOIN comments AS c
+//     ON c.movie_id = m.id
+//     ORDER BY m.title
+//     `;
+//     con.query(sql, (err, result) => {
+//         if (err) throw err;
+//         res.send(result);
+//     });
+// });
 
 
-//EDIT
-app.put("/home/movies/:id", (req, res) => {
-    const sql = `
-    UPDATE movies
-    SET 
-    rating_sum = rating_sum + ?, 
-    rating_count = rating_count + 1, 
-    rating = rating_sum / rating_count
-    WHERE id = ?
-    `;
-    con.query(sql, [req.body.rate, req.params.id], (err, result) => {
-        if (err) throw err;
-        res.send({ msg: 'OK', text: 'Thanks for your vote!', type: 'info' });
-    });
-});
-app.put("/server/movies/:id", (req, res) => {
-    let sql;
-    let r;
-    if (req.body.deletePhoto) {
-        sql = `
-        UPDATE movies
-        SET title = ?, price = ?, image = null
-        WHERE id = ?
-        `;
-        r = [req.body.title, req.body.price, req.params.id];
-    } else if (req.body.image) {
-        sql = `
-        UPDATE movies
-        SET title = ?, price = ?, image = ?
-        WHERE id = ?
-        `;
-        r = [req.body.title, req.body.price, req.body.image, req.params.id];
-    } else {
-        sql = `
-        UPDATE movies
-        SET title = ?, price = ?
-        WHERE id = ?
-        `;
-        r = [req.body.title, req.body.price, req.params.id]
-    }
-    con.query(sql, r, (err, result) => {
-        if (err) throw err;
-        res.send({ msg: 'OK', text: 'The movie has been edited.', type: 'success' });
-    });
-});
+// //DELETE
+// app.delete("/server/movies/:id", (req, res) => {
+//     const sql = `
+//     DELETE FROM movies
+//     WHERE id = ?
+//     `;
+//     con.query(sql, [req.params.id], (err, result) => {
+//         if (err) throw err;
+//         res.send({ msg: 'OK', text: 'The movie has been deleted.', type: 'info' });
+//     });
+// });
+
+// app.delete("/server/comments/:id", (req, res) => {
+//     const sql = `
+//     DELETE FROM comments
+//     WHERE id = ?
+//     `;
+//     con.query(sql, [req.params.id], (err, result) => {
+//         if (err) throw err;
+//         res.send({ msg: 'OK', text: 'Unappropriate comment has been deleted.', type: 'info' });
+//     });
+// });
+
+
+// //EDIT
+// app.put("/home/movies/:id", (req, res) => {
+//     const sql = `
+//     UPDATE movies
+//     SET 
+//     rating_sum = rating_sum + ?, 
+//     rating_count = rating_count + 1, 
+//     rating = rating_sum / rating_count
+//     WHERE id = ?
+//     `;
+//     con.query(sql, [req.body.rate, req.params.id], (err, result) => {
+//         if (err) throw err;
+//         res.send({ msg: 'OK', text: 'Thanks for your vote!', type: 'info' });
+//     });
+// });
+// app.put("/server/movies/:id", (req, res) => {
+//     let sql;
+//     let r;
+//     if (req.body.deletePhoto) {
+//         sql = `
+//         UPDATE movies
+//         SET title = ?, price = ?, image = null
+//         WHERE id = ?
+//         `;
+//         r = [req.body.title, req.body.price, req.params.id];
+//     } else if (req.body.image) {
+//         sql = `
+//         UPDATE movies
+//         SET title = ?, price = ?, image = ?
+//         WHERE id = ?
+//         `;
+//         r = [req.body.title, req.body.price, req.body.image, req.params.id];
+//     } else {
+//         sql = `
+//         UPDATE movies
+//         SET title = ?, price = ?
+//         WHERE id = ?
+//         `;
+//         r = [req.body.title, req.body.price, req.params.id]
+//     }
+//     con.query(sql, r, (err, result) => {
+//         if (err) throw err;
+//         res.send({ msg: 'OK', text: 'The movie has been edited.', type: 'success' });
+//     });
+// });
 
 app.listen(port, () => {
-    console.log(`Filmus rodo per ${port} portą!`)
+    console.log(`Savyvaldybes yra registruotos ${port} porte!`)
 });
 
 
