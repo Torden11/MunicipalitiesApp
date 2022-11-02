@@ -8,45 +8,56 @@ import DataContext from "../../Contexts/DataContext";
 function Main() {
 
     const [lastUpdate, setLastUpdate] = useState(Date.now());
-    const [municipalities, setMunicipalities] = useState(null);
+    const [comments, setComments] = useState(null);
     const [comment, setComment] = useState(null);
+    const [deleteData, setDeleteData] = useState(null);
     const { makeMsg } = useContext(DataContext);
 
-    const reList = data => {
-        const d = new Map();
-        data.forEach(line => {
-            if (d.has(line.title)) {
-                d.set(line.title, [...d.get(line.title), line]);
-            } else {
-                d.set(line.title, [line]);
-            }
-        });
-        return [...d];
-    }
+    
 
     // READ for list
     useEffect(() => {
-        axios.get('http://localhost:3003/server/municipalities/nocomments', authConfig())
+        axios.get('http://localhost:3003/server/comments', authConfig())
             .then(res => {
-                setMunicipalities(reList(res.data));
+                setComments(res.data.map((d, i) => ({ ...d, show: true, row: i })));
             })
     }, [lastUpdate]);
 
+    // UPDATE comment
     useEffect(() => {
-        if (null === comment) {
+        if (comment === null) {
+          return;
+        }
+        axios
+          .put(
+            "http://localhost:3003/home/comments/" + comment.id,
+            comment,
+            authConfig()
+          )
+          .then((res) => {
+            setLastUpdate(Date.now());
+          });
+      }, [comment]);
+
+
+// DELETE comment
+    useEffect(() => {
+        if (deleteData === null) {
             return;
         }
-        axios.delete('http://localhost:3003/server/comments/' + comment.id, authConfig())
+        axios.delete('http://localhost:3003/server/comments/' + deleteData.id, authConfig())
             .then(res => {
                 setLastUpdate(Date.now());
                 makeMsg(res.data.text, res.data.type);
             })
-    }, [comment, makeMsg]);
+    }, [deleteData, makeMsg]);
 
     return (
         <Comment.Provider value={{
             setComment,
-            municipalities
+            comments,
+            setComments,
+            setDeleteData
         }}>
             <div className="container">
                 <div className="row">

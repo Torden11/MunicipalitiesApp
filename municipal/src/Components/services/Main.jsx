@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import Municipalities from '../../Contexts/Municipalities';
+import Services from '../../Contexts/Services';
 import DataContext from '../../Contexts/DataContext';
 import { useContext } from 'react';
 import Create from './Create';
@@ -9,7 +9,7 @@ import Edit from './Edit';
 import { authConfig } from '../../Functions/auth';
 
 function Main() {
-    const [municipalities, setMunicipalities] = useState(null);
+    const [services, setServices] = useState(null);
     const [createData, setCreateData] = useState(null);
     const [deleteData, setDeleteData] = useState(null);
     const [modalData, setModalData] = useState(null);
@@ -24,7 +24,7 @@ function Main() {
         if (null === createData) {
             return;
         }
-        axios.post('http://localhost:3003/server/municipalities', createData, authConfig())
+        axios.post('http://localhost:3003/server/services', createData, authConfig())
             .then(res => {
                 setLastUpdate(Date.now());
                 makeMsg(res.data.text, res.data.type);
@@ -33,9 +33,9 @@ function Main() {
 
     // READ for list
     useEffect(() => {
-        axios.get('http://localhost:3003/server/municipalities', authConfig())
+        axios.get('http://localhost:3003/server/services', authConfig())
             .then(res => {
-                setMunicipalities(res.data);
+                setServices(res.data);
             })
     }, [lastUpdate]);
     
@@ -44,7 +44,7 @@ function Main() {
         if (null === editData) {
             return;
         }
-        axios.put('http://localhost:3003/server/municipalities/' + editData.id, editData, authConfig())
+        axios.put('http://localhost:3003/server/services/' + editData.id, editData, authConfig())
             .then(res => {
                 setLastUpdate(Date.now());
                 makeMsg(res.data.text, res.data.type);
@@ -56,7 +56,7 @@ function Main() {
         if (null === deleteData) {
             return;
         }
-        axios.delete('http://localhost:3003/server/municipalities/' + deleteData.id, authConfig())
+        axios.delete('http://localhost:3003/server/services/' + deleteData.id, authConfig())
             .then(res => {
                 setLastUpdate(Date.now());
                 makeMsg(res.data.text, res.data.type);
@@ -67,9 +67,9 @@ function Main() {
 
 
     return (
-        <Municipalities.Provider value={{
+        <Services.Provider value={{
             setCreateData,
-            municipalities,
+            services,
             setDeleteData,
             modalData,
             setModalData,
@@ -87,7 +87,7 @@ function Main() {
                 </div>
             </div>
             <Edit />
-        </Municipalities.Provider>
+        </Services.Provider>
     )
 }
 

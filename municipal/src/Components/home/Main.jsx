@@ -1,71 +1,78 @@
 import Home from "../../Contexts/Home";
+import Create from "./Create";
 import List from "./List";
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { authConfig } from '../../Functions/auth';
 import { useContext } from "react";
 import DataContext from "../../Contexts/DataContext";
 
-function Main() {
+const Main = () => {
 
         const [lastUpdate, setLastUpdate] = useState(Date.now());
         const [municipalities, setMunicipalities] = useState(null);
-        const [rateData, setRateData] = useState(null);
-        const [comment, setComment] = useState(null);
+        const [services, setServices] = useState(null);
+        const [comments, setComments] = useState(null);
+        const [createData, setCreateData] = useState(null);
         const { makeMsg } = useContext(DataContext);
 
-        const reList = data => {
-            const d = new Map();
-            data.forEach(line => {
-                if (d.has(line.title)) {
-                    d.set(line.title, [...d.get(line.title), line]);
-                } else {
-                    d.set(line.title, [line]);
-                }
-            });
-            return [...d];
-        }
+        const filterOn = useRef(false);
+        const filterWhat = useRef(null);
+       
 
-
-        // READ for list
+                // READ for list
         useEffect(() => {
             axios.get('http://localhost:3003/home/municipalities', authConfig())
                 .then(res => {
-                    setMunicipalities(reList(res.data));
+                    setMunicipalities(res.data)
+                });
+            }, [])
+
+        useEffect(() => {
+            axios.get('http://localhost:3003/home/services', authConfig())
+                .then(res => {
+                    setServices(res.data)
+                }, [])
+
+                axios.get('http://localhost:3003/home/comments', authConfig())
+                .then(res => {
+                    setComments(res.data.map((d, i) => ({ ...d, show: true, row: i })));
                 })
         }, [lastUpdate]);
 
+        //CREATE COMMENT
+
         useEffect(() => {
-            if (null === comment) {
+            if (createData === null) {
                 return;
             }
-            axios.post('http://localhost:3003/home/comments/' + comment.mun_id, comment, authConfig())
+            axios.post('http://localhost:3003/server/comments', createData, authConfig())
             .then(res => {
                 setLastUpdate(Date.now());
                 makeMsg(res.data.text, res.data.type);
             })
-         }, [comment, makeMsg]);
+         }, [createData, makeMsg]);
+         
 
 
-        useEffect(() => {
-            if (null === rateData) {
-                return;
-            }
-            axios.put('http://localhost:3003/home/municipalities/' + rateData.id, rateData, authConfig())
-            .then(res => {
-                setLastUpdate(Date.now());
-                makeMsg(res.data.text, res.data.type);
-            });
-        }, [rateData, makeMsg]);
-
+        
       return (
         <Home.Provider value={{
+            comments,
             municipalities,
-            setRateData,
-            setMunicipalities,
-            setComment
+            services, 
+            setComments,
+            setCreateData,
+            createData, 
+            filterOn,
+            filterWhat
         }}>
         <div className="container">
+        <div className="row">
+                <div className="col-12">
+                    <Create municipalities={municipalities} />
+                </div>
+            </div>
             <div className="row">
                 <div className="col-12">
                     <List/>
@@ -75,5 +82,6 @@ function Main() {
         </Home.Provider>
     );
 }
+
 
 export default Main;

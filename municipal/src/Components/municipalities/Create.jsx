@@ -6,13 +6,13 @@ import getBase64 from '../../Functions/getBase64';
 function Create() {
 
     const [title, setTitle] = useState('');
-    const [service, setService] = useState('');
+    const [photoPrint, setPhotoPrint] = useState(null);
     const fileInput = useRef();
 
     const { setCreateData } = useContext(Municipalities);
     const {makeMsg} = useContext(DataContext);
 
-    const [photoPrint, setPhotoPrint] = useState(null);
+    
 
     const doPhoto = () => {
         getBase64(fileInput.current.files[0])
@@ -28,17 +28,11 @@ function Create() {
             makeMsg('Invalid title', 'error');
             return;
         }
-        if (service.length === 0 || service.length > 50) {
-            makeMsg('Invalid title', 'error');
-            return;
-        }
         setCreateData({
             title,
-            service,
             image: photoPrint
         });
         setTitle('');
-        setService('');
         setPhotoPrint(null);
         fileInput.current.value = null;
     }
@@ -50,10 +44,6 @@ function Create() {
                 <div className="mb-3">
                     <label className="form-label">Municipality title</label>
                     <input type="text" className="form-control" value={title} onChange={e => setTitle(e.target.value)} />
-                </div>
-                <div className="mb-3">
-                    <label className="form-label">Municipality service</label>
-                    <input type="text" className="form-control" value={service} onChange={e => setService(e.target.value)} />
                 </div>
                 <div className="mb-3">
                     <label className="form-label">Municipality Shield Image</label>

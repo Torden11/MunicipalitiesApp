@@ -5,7 +5,6 @@ import getBase64 from '../../Functions/getBase64';
 function Edit() {
 
     const [title, setTitle] = useState('');
-    const [service, setService] = useState('');
     const fileInput = useRef();
     const [photoPrint, setPhotoPrint] = useState(null);
     const [deletePhoto, setDeletePhoto] = useState(false);
@@ -23,7 +22,6 @@ function Edit() {
     const edit = () => {
         setEditData({
             title,
-            service,
             id: modalData.id,
             deletePhoto: deletePhoto ? 1 : 0,
             image: photoPrint
@@ -37,7 +35,6 @@ function Edit() {
             return;
         }
         setTitle(modalData.title);
-        setService(modalData.service);
         setPhotoPrint(modalData.image);
         setDeletePhoto(false);
     }, [modalData])
@@ -63,11 +60,7 @@ function Edit() {
                                 <input type="text" className="form-control" value={title} onChange={e => setTitle(e.target.value)} />
                             </div>
                             <div className="mb-3">
-                                <label className="form-label">Municipality Service</label>
-                                <input type="text" className="form-control" value={service} onChange={e => setService(e.target.value)} />
-                            </div>
-                            <div className="mb-3">
-                                <label className="form-label">Movie Image</label>
+                                <label className="form-label">Municipality Image</label>
                                 <input ref={fileInput} type="file" className="form-control" onChange={doPhoto} />
                             </div>
                             {photoPrint ? <div className='img-bin'>

@@ -18,9 +18,6 @@ function Line({ municipality }) {
                     <div className="line__content__title">
                         <h1>{municipality.title}</h1>
                     </div>
-                    <div className="line__content__info">
-                        Paslauga: {municipality.service}
-                    </div>
                 </div>
                 <div className="line__buttons">
                     <button onClick={() => setModalData(municipality)} type="button" className="btn btn-outline-success">Edit</button>

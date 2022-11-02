@@ -10,6 +10,7 @@ import Nav from "./Components/Nav";
 import Home from "./Components/home/Main";
 import MainComments from "./Components/comment/Main";
 import Main from "./Components/municipalities/Main";
+import MainS from "./Components/services/Main";
 import RegisterPage from "./Components/register/Main";
 import { login, logout, authConfig } from "./Functions/auth";
 import { useState, useEffect, useCallback, useContext } from "react";
@@ -82,6 +83,14 @@ function App() {
             element={
               <RequireAuth role="admin">
                 <Main />
+              </RequireAuth>
+            }
+          ></Route>
+          <Route
+            path="/services"
+            element={
+              <RequireAuth role="admin">
+                <MainS />
               </RequireAuth>
             }
           ></Route>

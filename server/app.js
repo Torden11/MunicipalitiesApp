@@ -127,30 +127,45 @@ app.post("/register", (req, res) => {
 
 ///////////////////END////////////////////
 
-//CREATE
+//CREATE MUNICIPALITY
 app.post("/server/municipalities", (req, res) => {
     const sql = `
-    INSERT INTO municipalities (title, service, image)
-    VALUES (?, ?, ?)
+    INSERT INTO municipalities (title, image)
+    VALUES (?, ?)
     `;
-    con.query(sql, [req.body.title, req.body.service, req.body.image], (err, result) => {
+    con.query(sql, [req.body.title, req.body.image], (err, result) => {
         if (err) throw err;
         res.send({ msg: 'OK', text: 'A new municipality has been added.', type: 'success' });
     });
 });
 
-app.post("/home/comments/:id", (req, res) => {
+//CREATE SERVICE
+app.post("/server/services", (req, res) => {
     const sql = `
-    INSERT INTO comments (post, mun_id)
-    VALUES (?, ?)
+    INSERT INTO services (title)
+    VALUES (?)
     `;
-    con.query(sql, [req.body.post, req.params.id], (err, result) => {
+    con.query(sql, [req.body.title], (err, result) => {
+        if (err) throw err;
+        res.send({ msg: 'OK', text: 'A new service has been added.', type: 'success' });
+    });
+});
+
+//CREATE COMMENT
+app.post("/server/comments", (req, res) => {
+    const sql = `
+    INSERT INTO comments (post, mun_id, service_id)
+    VALUES (?, ?, ?)
+    `;
+    con.query(sql, [req.body.post, req.body.mun_id, req.body.service_id], (err, result) => {
         if (err) throw err;
         res.send({ msg: 'OK', text: 'Thanks for the post.', type: 'info' });
     });
 });
 
-// READ (all)
+
+
+// READ MUNICIPALITY
 app.get("/server/municipalities", (req, res) => {
     const sql = `
     SELECT *
@@ -163,6 +178,47 @@ app.get("/server/municipalities", (req, res) => {
     });
 });
 
+// READ SERVICE form admin
+app.get("/server/services", (req, res) => {
+    const sql = `
+    SELECT *
+    FROM services
+    ORDER BY id DESC
+    `;
+    con.query(sql, (err, result) => {
+        if (err) throw err;
+        res.send(result);
+    });
+});
+
+// READ SERVICE for home
+app.get("/home/services", (req, res) => {
+    const sql = `
+    SELECT *
+    FROM services
+    ORDER BY id DESC
+    `;
+    con.query(sql, (err, result) => {
+        if (err) throw err;
+        res.send(result);
+    });
+});
+
+app.get("/home/comments", (req, res) => {
+    const sql = `
+    SELECT c.*, m.title AS municipalityTitle, mun_id AS mid, m.image AS municipalityImage, s.title AS serviceTitle, s.id AS sid
+    FROM comments AS c
+    INNER JOIN municipalities AS m 
+    ON c.mun_id = mun_id
+    INNER JOIN services AS s
+    ON c.service_id = s.id
+    WHERE c.status = 1
+    `;
+    con.query(sql, (err, result) => {
+        if (err) throw err;
+        res.send(result);
+    });
+});
 app.get("/home/municipalities", (req, res) => {
     const sql = `
     SELECT m.*, c.id AS cid, c.post
@@ -176,7 +232,6 @@ app.get("/home/municipalities", (req, res) => {
         res.send(result);
     });
 });
-
 app.get("/server/municipalities/nocomments", (req, res) => {
     const sql = `
     SELECT m.*, c.id AS cid, c.post
@@ -192,7 +247,7 @@ app.get("/server/municipalities/nocomments", (req, res) => {
 });
 
 
-// //DELETE
+// DELETE MUNICIPALITY
 app.delete("/server/municipalities/:id", (req, res) => {
     const sql = `
     DELETE FROM municipalities
@@ -201,6 +256,18 @@ app.delete("/server/municipalities/:id", (req, res) => {
     con.query(sql, [req.params.id], (err, result) => {
         if (err) throw err;
         res.send({ msg: 'OK', text: 'The municipality has been deleted.', type: 'info' });
+    });
+});
+
+// DELETE SERVICE
+app.delete("/server/services/:id", (req, res) => {
+    const sql = `
+    DELETE FROM services
+    WHERE id = ?
+    `;
+    con.query(sql, [req.params.id], (err, result) => {
+        if (err) throw err;
+        res.send({ msg: 'OK', text: 'The service has been deleted.', type: 'info' });
     });
 });
 
@@ -232,6 +299,7 @@ app.delete("/server/comments/:id", (req, res) => {
 //     });
 // });
 
+//UPDATE MUNICIPALITY
 app.put("/server/municipalities/:id", (req, res) => {
     let sql;
     let r;
@@ -239,32 +307,45 @@ app.put("/server/municipalities/:id", (req, res) => {
         sql = `
         UPDATE municipalities
     
-        SET title = ?, service = ?, image = null
+        SET title = ?, image = null
         WHERE id = ?
         `;
-        r = [req.body.title, req.body.service, req.params.id];
+        r = [req.body.title, req.params.id];
     } else if (req.body.image) {
         sql = `
         UPDATE municipalities
     
-        SET title = ?, service = ?, image = ?
+        SET title = ?, image = ?
         WHERE id = ?
         `;
-        r = [req.body.title, req.body.service, req.body.image, req.params.id];
+        r = [req.body.title, req.body.image, req.params.id];
     } else {
         sql = `
         UPDATE municipalities
     
-        SET title = ?, service = ?
+        SET title = ?,
         WHERE id = ?
         `;
-        r = [req.body.title, req.body.service, req.params.id]
+        r = [req.body.title, req.params.id]
     }
     con.query(sql, r, (err, result) => {
         if (err) throw err;
         res.send({ msg: 'OK', text: 'The municipality has been edited.', type: 'success' });
     });
 });
+
+//UPDATE SERVICES
+app.put("/server/services/:id", (req, res) => {
+    const sql = `
+      UPDATE services
+      SET title = ?
+      WHERE id = ?
+      `;
+    con.query(sql, [req.body.title, req.params.id], (err, result) => {
+      if (err) throw err;
+      res.send({ msg: 'OK', text: 'The service has been edited.', type: 'success' });
+    });
+  });
 
 app.listen(port, () => {
     console.log(`Savyvaldybes yra registruotos ${port} porte!`)
