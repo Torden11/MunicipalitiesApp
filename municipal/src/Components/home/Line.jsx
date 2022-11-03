@@ -55,18 +55,18 @@ const Line = ({ comment }) => {
                   alt={comment.municipalityTitle}
                 ></img>
                 </div>
-                <div className="savivaldybe_title">
+                <div className="line__content__title">
                   {comment.municipalityTitle}
                 </div>
               </div>
               <div
-                className="line__content__sritis click-link"
+                className="line__content__info click-link"
                 onClick={filterByService}
               >
                 {comment.serviceTitle}
               </div>
             </div>
-            <div className="line__content__post">{comment.post}</div>
+            <div className="line__content__info">{comment.post}</div>
           </div>
         </div>
       </li>

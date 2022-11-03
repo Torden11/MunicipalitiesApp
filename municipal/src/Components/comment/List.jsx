@@ -6,12 +6,12 @@ import Line from './Line';
 function List() {
 
     const { comments, setComments } = useContext(Comment);
-    const [status, setStatus] = useState('1')
+    const [status, setStatus] = useState('5')
     
 
 
     useEffect(() => {
-        if (Number(status) === 1) {
+        if (Number(status) === 5) {
           setComments((prevCom) => prevCom?.map((c) => ({ ...c, show: true })));
         } else {
           setComments((prevCom) =>
@@ -38,7 +38,7 @@ function List() {
               value={status}
               onChange={(e) => setStatus(e.target.value)}
             >
-              <option value={0} defaultValue>
+              <option value={5} defaultValue>
                 All
               </option>
               <option value={0}>Not confirmed</option>
