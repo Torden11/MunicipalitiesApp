@@ -70,7 +70,7 @@ const Main = () => {
         <div className="container">
         <div className="row">
                 <div className="col-12">
-                    <Create municipalities={municipalities} />
+                    <Create/>
                 </div>
             </div>
             <div className="row">

@@ -45,14 +45,16 @@ const Line = ({ comment }) => {
           <div className="line__content">
             <div className="line__content__info">
               <div
-                className="line__content__savivaldybe click-link"
+                className="line__content__info"
                 onClick={filterByMunicipality}
               >
+                <div className="img-bin">
                 <img
-                  className="line__image"
-                  src={comment.savivaldybeImage}
+                  className="line__content_info"
+                  src={comment.municipalityImage}
                   alt={comment.municipalityTitle}
                 ></img>
+                </div>
                 <div className="savivaldybe_title">
                   {comment.municipalityTitle}
                 </div>
