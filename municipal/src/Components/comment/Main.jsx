@@ -28,12 +28,7 @@ function Main() {
         if (comment === null) {
           return;
         }
-        axios
-          .put(
-            "http://localhost:3003/home/comments/" + comment.id,
-            comment,
-            authConfig()
-          )
+        axios.put("http://localhost:3003/server/comments/" + comment.id, comment, authConfig())
           .then((res) => {
             setLastUpdate(Date.now());
           });

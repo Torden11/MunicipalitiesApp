@@ -38,7 +38,7 @@ function List() {
               value={status}
               onChange={(e) => setStatus(e.target.value)}
             >
-              <option value={1} defaultValue>
+              <option value={0} defaultValue>
                 All
               </option>
               <option value={0}>Not confirmed</option>
@@ -52,7 +52,7 @@ function List() {
 
         <ul className="list-group">
           {comments?.map((c) =>
-            c.show ? <Line key={c.id} comment={c} /> : null
+            c.show ? <Line key={c.comment_id} comment={c} /> : null
           )}
         </ul>
       </div>

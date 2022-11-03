@@ -46,7 +46,7 @@ const Main = () => {
             if (createData === null) {
                 return;
             }
-            axios.post('http://localhost:3003/server/comments', createData, authConfig())
+            axios.post('http://localhost:3003/home/comments', createData, authConfig())
             .then(res => {
                 setLastUpdate(Date.now());
                 makeMsg(res.data.text, res.data.type);

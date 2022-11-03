@@ -152,7 +152,7 @@ app.post("/server/services", (req, res) => {
 });
 
 //CREATE COMMENT
-app.post("/server/comments", (req, res) => {
+app.post("/home/comments", (req, res) => {
     const sql = `
     INSERT INTO comments (post, mun_id, service_id)
     VALUES (?, ?, ?)
@@ -165,7 +165,7 @@ app.post("/server/comments", (req, res) => {
 
 
 
-// READ MUNICIPALITY
+// READ MUNICIPALITY for admin
 app.get("/server/municipalities", (req, res) => {
     const sql = `
     SELECT *
@@ -178,7 +178,20 @@ app.get("/server/municipalities", (req, res) => {
     });
 });
 
-// READ SERVICE form admin
+// READ MUNICIPALITY for home
+app.get("/home/municipalities", (req, res) => {
+    const sql = `
+    SELECT *
+    FROM municipalities
+    ORDER BY id DESC
+    `;
+    con.query(sql, (err, result) => {
+        if (err) throw err;
+        res.send(result);
+    });
+});
+
+// READ SERVICE for admin
 app.get("/server/services", (req, res) => {
     const sql = `
     SELECT *
@@ -209,7 +222,7 @@ app.get("/home/comments", (req, res) => {
     SELECT c.*, m.title AS municipalityTitle, mun_id AS mid, m.image AS municipalityImage, s.title AS serviceTitle, s.id AS sid
     FROM comments AS c
     INNER JOIN municipalities AS m 
-    ON c.mun_id = mun_id
+    ON c.mun_id = m.id
     INNER JOIN services AS s
     ON c.service_id = s.id
     WHERE c.status = 1
@@ -219,32 +232,24 @@ app.get("/home/comments", (req, res) => {
         res.send(result);
     });
 });
-app.get("/home/municipalities", (req, res) => {
+
+// READ COMMENTS for admin
+
+app.get("/server/comments", (req, res) => {
     const sql = `
-    SELECT m.*, c.id AS cid, c.post
-    FROM municipalities AS m
-    LEFT JOIN comments AS c
+    SELECT  m.title AS municipalityTitle, mun_id AS mid, s.title AS serviceTitle, c.post, c.status, c.id as comment_id
+    FROM comments AS c
+    INNER JOIN municipalities AS m
     ON c.mun_id = m.id
-    ORDER BY m.title
+    INNER JOIN services AS s
+    ON c.service_id = s.id
     `;
     con.query(sql, (err, result) => {
-        if (err) throw err;
-        res.send(result);
+      if (err) throw err;
+      res.send(result);
     });
-});
-app.get("/server/municipalities/nocomments", (req, res) => {
-    const sql = `
-    SELECT m.*, c.id AS cid, c.post
-    FROM municipalities AS m
-    INNER JOIN comments AS c
-    ON c.mun_id = m.id
-    ORDER BY m.title
-    `;
-    con.query(sql, (err, result) => {
-        if (err) throw err;
-        res.send(result);
-    });
-});
+  });
+
 
 
 // DELETE MUNICIPALITY
@@ -282,22 +287,6 @@ app.delete("/server/comments/:id", (req, res) => {
     });
 });
 
-
-// //EDIT
-// app.put("/home/municipalities/:id", (req, res) => {
-//     const sql = `
-//     UPDATE municipalities
-//     SET 
-//     rating_sum = rating_sum + ?, 
-//     rating_count = rating_count + 1, 
-//     rating = rating_sum / rating_count
-//     WHERE id = ?
-//     `;
-//     con.query(sql, [req.body.rate, req.params.id], (err, result) => {
-//         if (err) throw err;
-//         res.send({ msg: 'OK', text: 'Thanks for your vote!', type: 'info' });
-//     });
-// });
 
 //UPDATE MUNICIPALITY
 app.put("/server/municipalities/:id", (req, res) => {
@@ -344,6 +333,20 @@ app.put("/server/services/:id", (req, res) => {
     con.query(sql, [req.body.title, req.params.id], (err, result) => {
       if (err) throw err;
       res.send({ msg: 'OK', text: 'The service has been edited.', type: 'success' });
+    });
+  });
+
+  // UPDATE COMMENTS for admin
+
+app.put("/server/comments/:id", (req, res) => {
+    const sql = `
+      UPDATE comments
+      SET status = ?
+      WHERE id = ?
+      `;
+    con.query(sql, [req.body.status, req.params.id], (err, result) => {
+      if (err) throw err;
+      res.send({ msg: 'OK', text: 'The comment has been approved.', type: 'success' });
     });
   });
 
