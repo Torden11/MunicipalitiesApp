@@ -19,17 +19,19 @@ function Line({ comment }) {
   return (
     <li className="list-group-item">
       <div className="home">
-        <div className="home_content">
-          <div className="home-content-info">comment # {comment.comment_id}</div>
-          <div className="home-content-info">
-            <div>{comment.municipalityTitle}</div>
-            <div>{comment.serviceTitle}</div>
+        <div className="home__content">
+          <div className="home__content__info">Comment ID: {comment.comment_id}</div>
+          <div className="home__content__info">
+            <div>Municipality: {comment.municipalityTitle}</div>
           </div>
-          <div className="home-content-info">
+          <div className="home__content__info">
+            <div>Service: {comment.serviceTitle}</div>
+          </div>
+          <div className="mx-auto home__content__info">
             <div>{comment.post}</div>
           </div>
         </div>
-        <div className="home-content">
+        <div className="mx-auto home__content__info">
           {comment.status === 0 ? (
             <div style={{ color: "crimson" }}>Not confirmed</div>
           ) : (
@@ -37,9 +39,9 @@ function Line({ comment }) {
           )}
         </div>
       </div>
-      <div className="home">
+      <div className="home__content">
         {comment.status === 0 ? (
-          <div className="home_content_buttons">
+          <div className="mx-auto home__buttons">
             <button
               onClick={() => approve(comment.comment_id)}
               type="button"

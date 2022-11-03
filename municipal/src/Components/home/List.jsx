@@ -38,7 +38,7 @@ const List = () => {
   return (
     <>
       <div className="card m-4">
-        <h5 className="card-header">Filter</h5>
+        <h5 className="card-header">Filter Comments</h5>
         <div className="card-body">
           <div className="mb-3">
             <label className="form-label">By municipality</label>
@@ -73,7 +73,7 @@ const List = () => {
         </div>
       </div>
       <div className="card m-4">
-        <h5 className="card-header">Comments:</h5>
+        <h5 className="card-header">Comments List:</h5>
         <button
           onClick={resetFilter}
           type="button"
