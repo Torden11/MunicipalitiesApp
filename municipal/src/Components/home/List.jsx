@@ -20,7 +20,7 @@ const List = () => {
   useEffect(() => {
     setComments((prevCom) =>
       prevCom?.map((c) =>
-        (Number(c.srid) === Number(serviceId) || Number(serviceId) === 0) &&
+        (Number(c.sid) === Number(serviceId) || Number(serviceId) === 0) &&
         (Number(c.mid) === Number(municipalityId) ||
           Number(municipalityId) === 0)
           ? { ...c, show: true }
