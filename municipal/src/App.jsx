@@ -4,16 +4,17 @@ import {
   Route,
   Routes,
   Navigate,
-  useNavigate,
-} from "react-router-dom";
+  } from "react-router-dom";
 import Nav from "./Components/Nav";
 import Home from "./Components/home/Main";
 import MainComments from "./Components/comment/Main";
 import Main from "./Components/municipalities/Main";
 import MainS from "./Components/services/Main";
 import RegisterPage from "./Components/register/Main";
-import { login, logout, authConfig } from "./Functions/auth";
-import { useState, useEffect, useCallback, useContext } from "react";
+import LoginPage from "./Components/login/LoginPage";
+import LogoutPage from "./Components/login/LogoutPage";
+import { authConfig } from "./Functions/auth";
+import { useState, useEffect, useCallback} from "react";
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
 import DataContext from "./Contexts/DataContext";
@@ -144,59 +145,5 @@ function RequireAuth({ children, role }) {
   return view;
 }
 
-function LoginPage({ setRoleChange }) {
-  const navigate = useNavigate();
-
-  const { makeMsg } = useContext(DataContext);
-  const [user, setUser] = useState("");
-  const [pass, setPass] = useState("");
-
-  const doLogin = () => {
-    axios.post("http://localhost:3003/login", { user, pass }).then((res) => {
-      setRoleChange(Date.now());
-      if ("ok" === res.data.msg) {
-        login(res.data.key);
-        navigate("/", { replace: true });
-        makeMsg(res.data.text, res.data.type);
-      }
-    })
-    .catch(() => {
-      makeMsg('You are not registered', 'error');
-    })
-  };
-  return (
-    <div className="container-login">
-      <h3 className="login-header">Login:</h3>
-      <div className="login-content">
-        name:{" "}
-        <input
-          type="text"
-          value={user}
-          onChange={(e) => setUser(e.target.value)}
-        ></input>
-      </div>
-      <div className="login-content">
-        password:{" "}
-        <input
-          type="password"
-          value={pass}
-          onChange={(e) => setPass(e.target.value)}
-        ></input>
-      </div>
-      <button onClick={doLogin}>Login</button>
-    </div>
-  );
-}
-
-function LogoutPage({ setRoleChange }) {
-  const { makeMsg } = useContext(DataContext);
-  useEffect(() => {
-    logout();
-    setRoleChange(Date.now());
-    makeMsg('We hope you will come back soon! :)', 'info');
-  }, [setRoleChange, makeMsg]);
-
-  return <Navigate to="/login" replace />;
-}
 
 export default App;

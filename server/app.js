@@ -159,7 +159,7 @@ app.post("/home/comments", (req, res) => {
     `;
     con.query(sql, [req.body.post, req.body.mun_id, req.body.service_id], (err, result) => {
         if (err) throw err;
-        res.send({ msg: 'OK', text: 'Thanks for the post.', type: 'info' });
+        res.send({ msg: 'OK', text: 'Thanks for the post. It will be approved soon.', type: 'info' });
     });
 });
 
@@ -217,6 +217,7 @@ app.get("/home/services", (req, res) => {
     });
 });
 
+// READ COMMENTS for home
 app.get("/home/comments", (req, res) => {
     const sql = `
     SELECT c.*, m.title AS municipalityTitle, mun_id AS mid, m.image AS municipalityImage, s.title AS serviceTitle, s.id AS sid
@@ -276,6 +277,7 @@ app.delete("/server/services/:id", (req, res) => {
     });
 });
 
+//DELETE comments
 app.delete("/server/comments/:id", (req, res) => {
     const sql = `
     DELETE FROM comments

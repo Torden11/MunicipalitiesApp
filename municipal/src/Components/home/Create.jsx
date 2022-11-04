@@ -12,15 +12,15 @@ const Create = () => {
 
   const addComment = () => {
     if (municipality === 0) {
-      makeMsg("Pasirinkite savivaldybę");
+      makeMsg("Please choose a municipality.");
       return;
     }
     if (service === 0) {
-      makeMsg("Pasirinkite sritį");
+      makeMsg("Please choose a service.");
       return;
     }
     if (post.length === 0) {
-      makeMsg("Neįrašėte jokio komentaro / pasiūlymo");
+      makeMsg("You haven't posted anything.");
       return;
     }
     setCreateData({

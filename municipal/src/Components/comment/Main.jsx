@@ -31,8 +31,9 @@ function Main() {
         axios.put("http://localhost:3003/server/comments/" + comment.id, comment, authConfig())
           .then((res) => {
             setLastUpdate(Date.now());
+            makeMsg(res.data.text, res.data.type);
           });
-      }, [comment]);
+      }, [comment, makeMsg]);
 
 
 // DELETE comment
