@@ -29,9 +29,9 @@ const List = () => {
     );
   }, [serviceId, municipalityId, setComments]);
 
-    const resetFilter = () => {
-      setMunicipalityId('');
-      setServiceId('');
+  const resetFilter = () => {
+    setMunicipalityId("");
+    setServiceId("");
     setComments((prevCom) => prevCom.map((c) => ({ ...c, show: true })));
     filterOn.current = false;
     filterWhat.current = null;
